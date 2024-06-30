@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+<body style="background-color: #E8E9EB;">
+
+
+
+  <!------------------------------------------------------------------------------------------------------------------------------->
+
+  <div class="container" style="background-color: #ffffff;">
+
+
+    <h1 style="text-align: center;  margin-bottom: 30px;">Condition Report</h1>
+<!--******************************************************************************************************-->
+
+    <% if (Constatdocument.Reporting_Information.Date_of_inspection || Constatdocument.Reporting_Information.Name || Constatdocument.Reporting_Information.Role || Constatdocument.Object_identification.Title) { %>
+      <div style="border: 4px solid black; padding: 10px; text-align: center; margin-bottom: 50px;" >
+        <% if (Constatdocument.Object_identification.Title) { %>
+          <p>
+            <strong>Condition Report for:</strong> <%= Constatdocument.Object_identification.Title %>
+          </p>
+        <% } %>
+        <% if (Constatdocument.Reporting_Information.Date_of_inspection) { %>
+          <p>
+            <strong>Date of inspection:</strong> <%= Constatdocument.Reporting_Information.Date_of_inspection %>
+          </p>
+        <% } %>
+        <% if (Constatdocument.Reporting_Information.Name) { %>
+          <p>
+            <strong>Submitted by:</strong> <%= Constatdocument.Reporting_Information.Name %>
+          </p>
+        <% } %>
+        <% if (Constatdocument.Reporting_Information.Role) { %>
+          <p>
+            <strong>Role of Reporter:</strong> <%= Constatdocument.Reporting_Information.Role %>
+          </p>
+        <% } %>
+      </div>
+      
+    
+      <% } %>
+
+<!--**********************************************REPORTING INFORMATION******************************************************-->
+
+
+<%
+  let printedBasicInfo = false;
+  let printedWorkingCondition = false;
+  let printedAdditionalDetails = false;
+%>
+
+<% if (Constatdocument.Reporting_Information && Object.values(Constatdocument.Reporting_Information).some(value => value)) { %>
+  <h2 style="border-bottom: 2px solid #03346F; color: black;">REPORTING INFORMATION</h2>
+  <ul style="list-style-type: none;">
+    <% 
+      const basicInfoFields = ['Institution', 'Tools', 'Methods', 'Purpose_of_condition_report', 'Name_of_client', 'Reliability_collected_data', 'Cmnt_reliabilty'];
+      const workingConditionFields = ['Height', 'Examination_center', 'Platform', 'Behind_glass', 'Quantity', 'Quality', 'Type', 'Support', 'Assets', 'Protection_Used'];
+      const additionalDetailsFields = ['Person_present_during_inspection', 'Contact_person_inspection', 'Duration_of_assessment', 'Inaccessibility'];
+
+      const hasBasicInfo = basicInfoFields.some(key => Constatdocument.Reporting_Information[key] && (!Array.isArray(Constatdocument.Reporting_Information[key]) || Constatdocument.Reporting_Information[key].length > 0));
+      const hasWorkingCondition = workingConditionFields.some(key => Constatdocument.Reporting_Information[key] && (!Array.isArray(Constatdocument.Reporting_Information[key]) || Constatdocument.Reporting_Information[key].length > 0));
+      const hasAdditionalDetails = additionalDetailsFields.some(key => Constatdocument.Reporting_Information[key] && (!Array.isArray(Constatdocument.Reporting_Information[key]) || Constatdocument.Reporting_Information[key].length > 0));
+    %>
+
+    <% if (hasBasicInfo) { %>
+      <h4 style="text-decoration: underline; color: #03346F;">Basic information</h4>
+      <% basicInfoFields.forEach(key => { 
+        const value = Constatdocument.Reporting_Information[key];
+        if (value && (!Array.isArray(value) || value.length > 0)) { 
+          const displayName = (key === 'Institution') ? 'Institution' :  (key === 'Tools') ? 'Tools used' : (key === 'Methods') ? 'Methods used' : (key === 'Purpose_of_condition_report') ? 'Purpose of condition report' : (key === 'Name_of_client') ? 'Name of client' : (key === 'Reliability_collected_data') ? 'Reliability of collected data' : (key === 'Cmnt_reliabilty') ? 'Comment on reliability' : '';
+      %>
+        <li>
+          <strong><%= displayName %>:</strong> <%= Array.isArray(value) ? value.join(', ') : value %>
+        </li>
+      <% } }) %>
+    <% } %>
+
+    <% if (hasWorkingCondition) { %>
+      <h4 style="text-decoration: underline; color: #03346F;">Working condition under which report created</h4>
+      <% workingConditionFields.forEach(key => { 
+        const value = Constatdocument.Reporting_Information[key];
+        if (value && (!Array.isArray(value) || value.length > 0)) {
+          const displayName = (key === 'Height') ? 'Height' : (key === 'Examination_center') ? 'Examination distance' : (key === 'Platform') ? 'Platform' : (key === 'Behind_glass') ? 'Behind mirror' : (key === 'Quantity') ? 'Quantity' : (key === 'Quality') ? 'Quality' : (key === 'Type') ? 'Type' : (key === 'Support') ? 'Support' : (key === 'Assets') ? 'Assets Used' : (key === 'Protection_Used') ? 'Protection Used' : '';
+      %>
+        <li>
+          <strong><%= displayName %>:</strong> <%= Array.isArray(value) ? value.join(', ') : value %>
+        </li>
+      <% } }) %>
+    <% } %>
+
+    <% if (hasAdditionalDetails) { %>
+      <h4 style="text-decoration: underline; color: #03346F;">Additional details</h4>
+      <% additionalDetailsFields.forEach(key => { 
+        const value = Constatdocument.Reporting_Information[key];
+        if (value && (!Array.isArray(value) || value.length > 0)) {
+          const displayName = (key === 'Person_present_during_inspection') ? 'Person(s) present during the inspection' : (key === 'Contact_person_inspection') ? 'Contact persons for the inspection' : (key === 'Duration_of_assessment') ? 'Time used to complete the survey' : (key === 'Inaccessibility') ? 'Inaccessibility of parts of Asset' : '';
+      %>
+        <li>
+          <strong><%= displayName %>:</strong> <%= Array.isArray(value) ? value.join(', ') : value %>
+        </li>
+      <% } }) %>
+    <% } %>
+  </ul>
+<% } %>
+
+
+
+
+<!--**********************************************OBJECT IDENTIFICATION******************************************************-->
+
+
+
+
+<% if (Constatdocument.Object_identification && Object.values(Constatdocument.Object_identification).some(value => value)) { %>
+  <h2 style="border-bottom: 2px solid #03346F; color: black;">OBJECT IDENTIFICATION</h2>
+  <ul style="list-style-type: none;">
+    <% Object.entries(Constatdocument.Object_identification).forEach(([key, value]) => { %>
+      <% if (value && (key === 'Identification_no' || key === 'Date_of_acquisition' || key === 'Title' || key === 'Author' || key === 'Date_of_creation' || key === 'Ownership' || key === 'Protection' || (key === 'Summary' && value))) { %>
+        <li>
+          <% const displayName = (key === 'Identification_no') ? 'Identification number' : (key === 'Date_of_acquisition') ? 'Date of Acquisition' : (key === 'Title') ? 'Title' : (key === 'Author') ? 'Author' : (key === 'Date_of_creation') ? 'Date of Creation' : (key === 'Ownership') ? 'Ownership' : (key === 'Protection') ? 'Protection information' : 'Summary of its importance';   %>
+          <% if (key === 'Summary') { %>
+            <div style="text-align: center;">
+              <strong><%= displayName %>:</strong>
+              <br>
+              <p><%= value %></p>
+            </div>
+          <% } else { %>
+            <strong><%= displayName %>:</strong> <%= value %>
+          <% } %>
+        </li>
+      <% } %>
+    <% }) %>
+  </ul>
+<% } %>
+
+
+
+
+    
+
+<!--------------------- OBJECT DESCRIPTION---------------------------------------------------------------------------------------------->
+
+<% if (Constatdocument.Object_description && Object.values(Constatdocument.Object_description).some(value => {
+  if (Array.isArray(value)) {
+    return value.length > 0; 
+  } else {
+    return value !== undefined && value !== null && value !== '';
+  }
+})) { %>
+<h2 style="border-bottom: 2px solid #000000; color: #000000;">OBJECT DESCRIPTION</h2>
+<ul style="list-style-type: none;">
+  <% let hasPhotoSection = false; %>
+  <% let captions = Constatdocument.Object_description.captions || []; %> 
+  <% Object.entries(Constatdocument.Object_description).forEach(([key, value]) => { %>
+    <% if (key === 'captions' || key === 'originalNames') { return; } %> 
+    <% if (Array.isArray(value) && value.length === 0) { %>
+      <% return; %> 
+    <% } %>
+    <% if (value !== undefined && value !== null && value !== '') { %>
+      <% if (key === 'Material' || key === 'Structure' || key === 'Surface' || key === 'History' || key === 'Technique' || key === 'Weight' || key === 'Constituent_elements' || key === 'No_of_items' || key === 'Heights' || key === 'Width') { %>
+        <% const displayName = (key === 'Material') ? 'Material' : (key === 'Structure') ? 'Structure' : (key === 'Surface') ? 'Surface' : (key === 'History') ? 'History' : (key === 'Technique') ? 'Technique' : (key === 'Weight') ? 'Weight' : (key === 'Constituent_elements') ? 'Constituent elements' : (key === 'No_of_items') ? 'Number of items' : (key === 'Heights') ? 'Height' : (key === 'Width') ? 'Width' : ''; %>
+        <li>
+          <strong><%= displayName %>:</strong> <%= value %>
+        </li>
+      <% } else if (key === 'Installation_notes' || key === 'Artist_installation_guide' || key === 'Object_creation_description') { %>
+        <% const customNames = {
+          'Installation_notes': 'Installation Notes',
+          'Artist_installation_guide': 'Artist Installation Guide',
+          'Object_creation_description': 'Object Creation Description'
+        }; %>
+        <div style="text-align: center;">
+          <strong><%= customNames[key] %>:</strong>
+          <br>
+          <p><%= value %></p>
+        </div>
+      <% } else if (key === 'filePaths') { %> 
+       
+        <li>
+         
+          <ul style="list-style-type: none; display: flex; flex-wrap: wrap; justify-content: center; padding: 0;">
+           <% value.forEach((filePath, index) => { %>
+            <li style="display: flex; flex-direction: column; align-items: center; width: 300px; margin: 10px;">
+            <img src="/<%= filePath %>" alt="<%= filePath %>" height="300" width="300" />
+            <span><%= captions[index] || '' %></span>
+            </li>
+           <% }) %>
+          </ul>
+
+        </li>
+      <% } else { %>
+        
+        <li>
+          <strong><%= key %>:</strong> <%= value %>
+        </li>
+      <% } %>
+    <% } %>
+  <% }) %>
+</ul>
+<% } %>
+
+
+
+<!--------------------- OBJECT ENVIRONMENT---------------------------------------------------------------------------------------------->
+
+
+<% if (Constatdocument.Object_environment && Object.values(Constatdocument.Object_environment).some(value => value)) { %>
+  <h2 style="border-bottom: 2px solid #03346F; color: black;">OBJECT ENVIRONMENT</h2>
+  <ul style="list-style-type: none;">
+    <% Object.entries(Constatdocument.Object_environment).forEach(([key, value]) => { %>
+      <% if (value && (key === 'Environment' || key === 'Effect')) { %>
+        <li style="display: flex; flex-direction: column; align-items: center;">
+          <% const displayName = (key === 'Environment') ? 'Environment in which item is held' : 'Effect of Environment on object';  %>
+          <strong><%= displayName %>:</strong><br>
+          <p><%= value %></p>
+        </li>
+      <% } %>
+    <% }) %>
+  </ul>
+<% } %>
+
+
+
+<!--------------------- CONDITION DESCRIPTION---------------------------------------------------------------------------------------------->
+
+<% if (Constatdocument.Conditions_description && Object.values(Constatdocument.Conditions_description).some(value => {
+  if (Array.isArray(value)) {
+    return value.length > 0; 
+  } else {
+    return value !== undefined && value !== null && value !== '';
+  }
+})) { %>
+<h2 style="border-bottom: 2px solid #000000; color: #000000;">CONDITION DESCRIPTION</h2>
+<ul style="list-style-type: none;">
+  <% let hasPrintedPhotoSection = false; %>
+  <% let captions = Constatdocument.Conditions_description.captions || []; %> 
+  <% Object.entries(Constatdocument.Conditions_description).forEach(([key, value]) => { %>
+    <% if (key === 'captions' || key === 'originalNames') { return; } %> 
+    <% if (Array.isArray(value) && value.length === 0) { %>
+      <% return; %> 
+    <% } %>
+    <% if (value !== undefined && value !== null && value !== '') { %>
+      <% if (key === 'Info_observed' || key === 'Report_change') { %>
+        <% const displayName = (key === 'Info_observed') ? 'Information observed concerning current state of item ' : 'Please report the change (repair, treatment)'; %>
+        <li style="display: flex; flex-direction: column; align-items: center;">
+          <strong><%= displayName %>:</strong><br>
+          <p><%= value %></p>
+        </li>
+      <% } else if (key === 'filePaths') { %> 
+       
+        <li>
+      
+          <ul style="list-style-type: none; display: flex; flex-wrap: wrap; justify-content: center; padding: 0;">
+           <% value.forEach((filePath, index) => { %>
+            <li style="display: flex; flex-direction: column; align-items: center; width: 300px; margin: 10px;">
+            <img src="/<%= filePath %>" alt="<%= filePath %>" height="300" width="300" />
+            <span><%= captions[index] || '' %></span>
+            </li>
+           <% }) %>
+          </ul>
+          
+        </li>
+      <% } else { %>
+        
+        <li>
+          <strong><%= key %>:</strong> <%= value %>
+        </li>
+      <% } %>
+    <% } %>
+  <% }) %>
+</ul>
+<% } %>
+
+
+<!--------------------- DIAGNOSTIC AND RECOMMENDATIONS---------------------------------------------------------------------------------------------->
+
+
+
+
+
+<% if (Constatdocument.Diagnostic_and_recommendations && Object.values(Constatdocument.Diagnostic_and_recommendations).some(value => value)) { %>
+  <h2 style="border-bottom: 2px solid #03346F; color: black;">DIAGNOSTIC AND RECOMMENDATIONS</h2>
+  <ul style="list-style-type: none;">
+    <% Object.entries(Constatdocument.Diagnostic_and_recommendations).forEach(([key, value]) => { %>
+      <% if (value && (key === 'Descriptive_diagnosis' || key === 'Recommendations' || key === 'Investigations')) { %>
+        <li style="display: flex; flex-direction: column; align-items: center;">
+          <% const displayName = (key === 'Descriptive_diagnosis') ? 'Descriptive diagnosis of reason for detrioration / Other changes in condition' : (key === 'Recommendations') ? 'Recommendations for further care and/or conservation:' : 'Further scientific, historical, technical or other investigation or analysis'; %>
+          <strong><%= displayName %>:</strong><br>
+          <p><%= value %></p>
+        </li>
+      <% } %>
+    <% }) %>
+  </ul>
+<% } %>
+
+<!---------------------------------------------------------------------------------->
+<% if (Constatdocument.submissionTimestamp) { %>
+  <p style="text-align: right;">Time of Submission: <%= Constatdocument.submissionTimestamp %></p>
+<% } %>
+<!----------------------------------------------------------------------------------->
+
+
+
+  </div>
+
+
+ <!------------------------------------------------------------------------------------------------------------------------------------------>   
+
+  <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <script>
+
+    function printPage() {
+      window.print();
+    }
+
+  </script>
+  <script src="logic.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
+
+<!------------------------------------------------------------------------------------------------------------------------------->

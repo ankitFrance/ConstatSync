@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+     <!-------------------------------------------Bootstrap cdn----------------------------------------------------------->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!------------------------------------------Font awesome cdn--------------------------------------------------------->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!------------------------------------------CSS FILE INCLUSIION------------------------------------------------------>
+
+    <link rel="stylesheet" href="/style.css">
+
+    <!------------------------------------------Semantic UI CSS---------------------------------------------------------->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css" integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!------------------------------------------JQUERY-------------------------------------------------------------------->
+  
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+
+    <!------------------------------------------Semantic UI javascript---------------------------------------------------------->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js" integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+   
+  </head>
+
+  <body>
+
+
+
+  
+
+    <div class="container">
+
+      <div class="form-row row">
+      <div class="col-md-2">
+        <label for="languageSelect">Select Language:</label>
+        <div class="input-group mb-3">
+            <select class="form-select" id="languageSelect" onchange="changeLanguage()">
+                <option value="en"> English  </span></option>
+                <option value="fr">Français</option>
+            </select>
+        </div>
+      </div>
+      </div>
+
+
+      <form id="UpdateForm" action="/updateSuccessful/<%= report._id %>" method="post" enctype="multipart/form-data" >
+
+        <!----Progress bar --->
+        <div class="progress" style="height: 25px;">
+          <div class="progress-bar progress-bar-striped bg-success" id="changeWidth" role="progressbar" style="width: 0%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <!------->
+
+
+        <!--########################################## FORM 1 ##########################################################################-->
+
+        
+        
+        <div class="step-form active" id="step1">
+          <h2 style="text-align: center; color: navy;" id="reporting_info_heading"> REPORTING INFORMATION </h2>
+
+          <div class="form-row row" style="padding: 5px 0;">
+
+            <div class="form-group col-md-1" >
+              <label for="inputState" id="nameretrived" class="col-form-label">Name</label>
+            </div>
+            <div class="form-group col-md-3">
+             <input  type="text" class="form-control" id="name" name="name" placeholder="" value="<%= report.Reporting_Information.Name %>"  >
+            </div>
+
+            <div class="form-group col-md-1" >
+              <label for="inputState" id="roleretrived" class="col-form-label">Role</label>
+            </div>
+            <div class="form-group col-md-3">
+             <input type="text" class="form-control" id="role" name="role" placeholder="" value="<%= report.Reporting_Information.Role %>"  >
+            </div>
+
+            <div class="form-group col-md-1" >
+              <label for="inputState" id="institutionretrieved" class="col-form-label">Institution</label>
+            </div>
+            <div class="form-group col-md-3">
+             <input type="text" class="form-control" id="institution" name="institution" placeholder="" value="<%= report.Reporting_Information.Institution %>" >
+            </div>
+
+          </div>
+
+              <% 
+              if (report.Reporting_Information.Date_of_inspection === null) {
+
+                var Date_of_inspection = "dd/mm/yyyy";
+
+              } else {
+
+                var dateFromDatabase = new Date(report.Reporting_Information.Date_of_inspection);
+                var Date_of_inspection = dateFromDatabase.toISOString().split('T')[0];
+
+              }
+              %>
+          
+          <div class="form-group row" style="padding: 5px 0;">
+            <label for="datepicker" id="date_of_inspection" class="col-md-2 col-form-label">Date of Inspection:</label>
+            <div class="col-md-2">
+              <input type="date" id="doii" name="doii" class="form-control" value="<%= Date_of_inspection %>">
+            </div>
+          </div>
+          
+          <!------------------------------------------------------------------------------->
+        
+          <div class="form-row row" style="padding: 5px 0;">
+
+            <div class="form-group col-md-2">
+
+              <select name="tools" multiple="" class="ui fluid dropdown" id="tools">
+                <option value="">Select Tools</option>
+                <% 
+                    // Define the known tools
+                    const knownTools = ['Tool 1', 'Tool 2', 'Tool 3', 'Tool 4', 'Tool 5'];
+                    const usedTools = report.Reporting_Information.Tools;
+            
+                    // Combine known tools and used tools, then filter out duplicates
+                    const allTools = [...new Set([...knownTools, ...usedTools])];
+            
+                    // Iterate over all unique tools and create options
+                    allTools.forEach(tool => {
+                %>
+                    <option value="<%= tool %>" <%= usedTools.includes(tool) ? 'selected' : '' %>><%= tool %></option>
+                <% }); %>
+              </select>
+              
+             
+            </div>
+            
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="exampleInputTextTool" placeholder="Enter new tool">
+            </div>
+          
+            <div class="form-group col-md-1">
+              <button type="button" class="btn btn-primary" id="buttonForAddTool">Add</button>
+            </div>
+
+            <div class="form-group col-md-2">
+
+              <select name="methods" multiple="" class="ui fluid dropdown" id="methods">
+                <option value="">Select Methods</option>
+                <% 
+                    // Define the known methods
+                    const knownMethods = ['Method 1', 'Method 2', 'Method 3', 'Method 4', 'Method 5'];
+                    const usedMethods = report.Reporting_Information.Methods;
+            
+                    // Combine known methods and used methods, then filter out duplicates
+                    const allMethods = [...new Set([...knownMethods, ...usedMethods])];
+            
+                    // Iterate over all unique methods and create options
+                    allMethods.forEach(method => {
+                %>
+                    <option value="<%= method %>" <%= usedMethods.includes(method) ? 'selected' : '' %>><%= method %></option>
+                <% }); %>
+              </select>
+              
+            </div>
+  
+            <div class="form-group col-md-2">
+              <input type="text" class="form-control" id="exampleInputTextMethod" placeholder="Enter new method">
+            </div>
+          
+            <div class="form-group col-md-1">
+              <button type="button" class="btn btn-primary" id="buttonForAddMethod">Add</button>
+            </div> 
+            
+          </div>
+           <!------------------------------------------------------------------------------->
+          
+          <div class="form-row row" style="padding: 5px 0;" >
+
+            <div class="form-group col-md-6">
+              <textarea class="form-control" id="purpose_of_condition_report" rows="2" placeholder="" name="purpose_of_condition_report" ><%= report.Reporting_Information.Purpose_of_condition_report %></textarea>
+            </div>
+
+            <div class="form-group col-md-1" style=" display: flex; align-items: center; justify-content: center;">
+              <i class="fa-solid fa-microphone" onclick="record()"></i>
+            </div>
+
+          </div>   
+           
+          <!------------------------------------------------------------------------------->
+
+     
+
+          <div class="form-group col-md-3" style="padding: 5px 0;">
+            <input type="text" class="form-control" id="name_of_client" placeholder="" name="name_of_client" value="<%= report.Reporting_Information.Name_of_client %>">
+          </div>
+             
+        
+          <div class="accordion" id="accordionExample">
+              <div class="accordion-item">
+
+                      <h2 class="accordion-header" id="headingThree">
+                      <button class="accordion-button collapsed bg-info" id="working_conditions" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="padding: 13px;">
+                      WORKING CONDITIONS UNDER WHICH REPORT IS CREATED 
+                      </button>
+                      </h2>
+
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+        
+                    <div class="form-row row" style="padding: 10px 0 0 0;">
+
+                      <div style="display: flex; align-items: center; text-align: center; margin: 1px 0;">
+                        <hr style="flex: 1; border: none; height: 2px; background-color: #000000;">
+                        <span id="spanPhysical" style="padding: 0 10px; color: purple;">Physical accessibility to the cultural heritage</span>
+                        <hr style="flex: 1; border: none; height: 2px; background-color: #000000;">
+                      </div>
+
+                      <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="height" placeholder="" name="height" value="<%= report.Reporting_Information.Height %>">
+                      </div>
+
+                      <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="examination_center" placeholder="" name="examination_center" value="<%= report.Reporting_Information.Examination_center %>">
+                      </div>
+          
+                      <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="platform" placeholder="" name="platform" value="<%= report.Reporting_Information.Platform %>">
+                      </div>
+
+                      <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="behind_glass" placeholder="" name="behind_glass" value="<%= report.Reporting_Information.Behind_glass %>">
+                      </div>
+
+                    </div>
+        
+                    <div class="form-row row" style="padding: 10px 0 0 0;">
+
+                      <div style="display: flex; align-items: center; text-align: center; margin: 1px 0;">
+                        <hr style="flex: 1; border: none; height: 2px; background-color: #000000;">
+                        <span id="spanLight" style="padding: 0 10px; color: purple;">Sufficient and safe lighting:</span>
+                        <hr style="flex: 1; border: none; height: 2px; background-color: #000000;">
+                      </div>
+
+                      <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="quantity" placeholder=""  name="quantity" value="<%= report.Reporting_Information.Quantity %>">
+                      </div>
+
+                      <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="quality" placeholder="" name="quality" value="<%= report.Reporting_Information.Quality %>">
+                      </div>
+          
+                      <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="type" placeholder="" name="type" value="<%= report.Reporting_Information.Type %>">
+                      </div>
+
+                    </div>
+
+                    <!--------->
+                    <hr>
+
+                    <fieldset class="form-group" style="padding: 10px 0 0 0;">
+
+                      <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="support" value="Sufficient Physical support"  <%= report.Reporting_Information.Support === 'Sufficient Physical support' ? 'checked' : '' %>>
+                            <label class="form-check-label" for="gridRadios1" id="sufficient_support">
+                            Sufficient Physical support
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="support" value="Mounting for the object" <%= report.Reporting_Information.Support === 'Mounting for the object' ? 'checked' : '' %>>
+                            <label class="form-check-label" for="gridRadios2" id="mounting_object">
+                            Mounting for the object
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                    </fieldset>
+
+       
+        
+                    <hr>
+
+                   <!-------ASSETS USED AND PROTECTION-->
+
+                    <div class="form-row row" style="padding: 5px 0;">
+         
+                      <div class="form-group col-md-2">
+
+                      <select name="assets" multiple="" class="ui fluid dropdown" id="assets">
+                        <option value="">Assets used</option>
+                        <% 
+                        // Define the known assets
+                         const knownAssets = ['Ruler', 'Microscope', 'Camera'];
+                         const usedAssets = report.Reporting_Information.Assets;
+          
+                        // Combine known assets and used assets, then filter out duplicates
+                        const allAssets = [...new Set([...knownAssets, ...usedAssets])];
+          
+                        // Iterate over all unique assets and create options
+                        allAssets.forEach(asset => {
+                         %>
+                        <option value="<%= asset %>" <%= usedAssets.includes(asset) ? 'selected' : '' %>><%= asset %></option>
+                        <% }); %>
+                      </select>
+          
+                      </div>
+
+                      <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="exampleInputTextAsset" placeholder="Enter new asset">
+                      </div>
+        
+                      <div class="form-group col-md-1">
+                        <button type="button" class="btn btn-primary" id="buttonForAddAsset">Add</button>
+                      </div>
+        
+          
+         
+                      <div class="form-group col-md-2">
+
+
+                        <select name="protectionUsed" multiple="" class="ui fluid dropdown" id="protectionUsed">
+
+                          <option value="">Select Protection</option>
+                          <% 
+                          // Define the known prot
+                          const knownProt = ['Gloves', 'Clothing'];
+                          const usedProt = report.Reporting_Information.Protection_Used;
+          
+                          // Combine known prot and used prot, then filter out duplicates
+                          const allProt = [...new Set([...knownProt, ...usedProt])];
+          
+                          // Iterate over all unique prot and create options
+                          allProt.forEach(Prot => {
+                          %>
+                          <option value="<%= Prot %>" <%= usedProt.includes(Prot) ? 'selected' : '' %>><%= Prot %></option>
+                          <% }); %>
+
+                        </select>
+            
+                      </div>
+
+                      <div class="form-group col-md-2">
+                        <input type="text" class="form-control" id="exampleInputTextProt" placeholder="Enter new protection">
+                      </div>
+        
+                      <div class="form-group col-md-1">
+                        <button type="button" class="btn btn-primary" id="buttonForAddProtection">Add</button>
+                      </div>
+        
+                    </div>
+
+                    <!-------ASSETS USED AND PROTECTION-->
+        
+                  </div>
+                </div>
+              </div>
+          </div>
+        
+        
+        
+        
+     
+
+          <fieldset class="form-group" style="padding: 10px 0 0 0;">
+            <div class="row">
+              <legend class="col-form-label col-md-3 pt-0" id="reliability_collect_data_label" style="font-weight: bold;">
+              Reliability of collected data :-</legend>
+               <div class="col-md-2">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="reliability_collected_data" value="Not Available" <%= report.Reporting_Information.Reliability_collected_data === 'Not Available' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="gridRadios1" id="not_available">
+                     Not Available
+                    </label>
+                  </div>
+               </div>
+               <div class="col-md-3">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="reliability_collected_data" value="Incomplete" <%= report.Reporting_Information.Reliability_collected_data === 'Incomplete' ? 'checked' : '' %>>
+                  <label class="form-check-label" for="gridRadios2" id="incomplete">
+                  Incomplete / Exhaustive
+                  </label>
+                </div>
+               </div>
+            </div>
+          </fieldset>
+
+          <div class="form-group col-md-3">
+            <input type="text" class="form-control" id="cmnt_reliabilty" name="cmnt_reliabilty" placeholder="Comment for reliabilty" value="<%= report.Reporting_Information.Cmnt_reliabilty %>">
+          </div>
+
+
+
+        
+        
+          
+         <div class="accordion" id="accordionExampl" style="padding: 10px 0 0 0;">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThre">
+              <button class="accordion-button collapsed bg-info" id="additional_details" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThre" aria-expanded="false" aria-controls="collapseThree" style="padding: 13px;">
+              ADDITIONAL DETAILS (OPTIONAL)
+              </button>
+            </h2>
+            <div id="collapseThre" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+              <div class="accordion-body">
+                
+                <!---->
+                <div class="form-row row" style="padding: 10px 0 0 0;">
+                  <div class="form-group col-md-3">
+                    <input type="text" class="form-control" id="person_present_during_inspection" placeholder="" name="person_present_during_inspection" value="<%= report.Reporting_Information.Person_present_during_inspection %>">
+                  </div>
+                  
+                  
+                  <div class="form-group col-md-3">
+                    <input type="text" class="form-control" id="contact_person_inspection" placeholder="" name="contact_person_inspection" value="<%= report.Reporting_Information.Contact_person_inspection %>">
+                  </div>
+                </div>
+                
+                <div class="form-row row" style="padding: 10px 0 0 0;">
+                  <div class="form-group col-md-3">
+                    <input type="text" class="form-control" id="duration_of_assessment" placeholder="" name="duration_of_assessment" value="<%= report.Reporting_Information.Duration_of_assessment %>">
+                  </div>
+                
+                <div class="form-group col-md-3">
+                  <input type="text" class="form-control" id="inaccessibility" placeholder="" name="inaccessibility" value="<%= report.Reporting_Information.Inaccessibility %>">
+                </div>
+                </div>
+                <!---->
+        
+              </div>
+            </div>
+          </div>
+         </div>
+        
+          <div style="padding: 10px 0 0 0;">
+            <button type="button" class="btn btn-success next">Next</button>
+          </div>
+
+        </div>
+
+
+
+        <!--########################################## FORM 2 ##########################################################################-->
+
+          <div class="step-form" id="step2">
+
+              <h2 style="text-align: center; color: navy;" id="obj_identification_heading"> OBJECT IDENTIFICATION  </h2>
+
+       
+
+              <div class="form-row row" style="padding: 5px 0;">
+
+              
+                <div class="col-md-2">
+                  <label class="col-form-label" for="" id="identification_noLabel">Identification No.</label>
+                </div>
+
+                <div class="form-group col-md-3">
+                  <input type="text" class="form-control" id="identification_no" name="identification_no" placeholder="" value="<%= report.Object_identification.Identification_no %>">
+                </div>
+
+                <!---Card for fetch eros and JOconde-->
+
+                <div class="card">
+                  <div class="card-body">
+                   <h5 class="card-title">Fetch data using identification number. Thanks to EROS and JOconde</h5>
+                    <div class="ui purple button" id="FetchEROS" >Fetch from EROS</div>
+                    <div class="ui purple button" id="FetchJOCONDE">Fetch from JOconde</div>
+                  </div>
+                </div>
+
+                 <!----------------------------------->
+
+                 <div class="alert alert-danger alert-dismissible fade show" id="errorAlert" style="display: none;" role="alert">
+                    Invalid Identification no. Please Enter valid one
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                 </div>
+                 <div class="alert alert-success alert-dismissible fade show" id="successAlert" style="display: none;" role="alert">
+                    Data fetched successfully.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                 </div>
+
+              </div>
+
+              <div class="form-row row" style="padding: 5px 0;">
+
+          
+                  <div class="col-md-2">
+                    <label  class="col-form-label" for="datepicker" id="doaLabel">Date of Acquisition:</label>
+                  </div>
+                  
+                  <% 
+                  if (report.Object_identification.Date_of_acquisition === null) {
+                  var Date_of_acquisition = "dd/mm/yyyy";
+                  } else {
+                  // report.Object_identification.Date_of_acquisition contains the date string from the database
+                  var dateFromDatabase = new Date(report.Object_identification.Date_of_acquisition);
+                  
+                  // Format the date as yyyy-mm-dd
+                  var Date_of_acquisition = dateFromDatabase.toISOString().split('T')[0];
+                  }
+                  %>
+
+                  <div class="col-md-3">
+                    <input type="date" id="date_of_acquisition" name="date_of_acquisition" class="form-control" value="<%= Date_of_acquisition %>">
+                  </div>
+
+              </div>
+
+     
+
+              <div class="form-row row" style="padding: 5px 0;">
+
+                <div class="form-group col-md-2" >
+                  <label for="" id="" class="col-form-label">Title</label>
+                </div>
+
+                <div class="form-group col-md-3">
+                  <input type="text" class="form-control" id="title" name="title" placeholder="" value="<%= report.Object_identification.Title %>">
+                </div>
+              
+              </div>
+
+         
+
+              <div class="form-row row" style="padding: 5px 0;">
+
+                <div class="form-group col-md-2" >
+                  <label for="" id="" class="col-form-label">Author/Creator</label>
+                </div>
+
+                <div class="form-group col-md-3">
+                  <input type="text" class="form-control" id="author" name="author" placeholder="" value="<%= report.Object_identification.Author %>">
+                </div>
+
+              </div>
+
+          
+              <div class="form-row row" style="padding: 5px 0;">
+
+                  <div class="col-md-2">
+                    <label  class="col-form-label" for="datepicker" id="docLabel">Date of Creation:</label>
+                  </div>
+
+                  
+                  <% 
+                  if (report.Object_identification.Date_of_creation === null) {
+                  var Date_of_creation = "dd/mm/yyyy";
+                  } else {
+                  // report.Object_identification.Date_of_acquisition contains the date string from the database
+                  var dateFromDB = new Date(report.Object_identification.Date_of_creation);
+                  
+                  // Format the date as yyyy-mm-dd
+                  var Date_of_creation = dateFromDB.toISOString().split('T')[0];
+                  }
+                  %>
+
+                  <div class="col-md-3">
+                    <input type="date" id="date_of_creation" name="date_of_creation" class="form-control" value="<%= Date_of_creation %>">
+                  </div>
+
+              </div>
+            
+
+              <hr>
+
+              <div class="form-row row">
+
+                <div class="form-group col-md-3">
+                  <input type="text" class="form-control" id="ownership" name="ownership" placeholder="" value="<%= report.Object_identification.Ownership %>">
+                </div>
+
+                <div class="form-group col-md-3">
+                  <input type="text" class="form-control" id="protection" name="protection" placeholder="" value="<%= report.Object_identification.Protection %>">
+                </div>
+
+              </div>
+
+
+              <div class="form-group col-md-6" style="padding: 5px 0;">
+                <textarea class="form-control" id="summary" rows="2" name="summary" placeholder="" ><%= report.Object_identification.Summary %></textarea>
+              </div>
+
+            
+              <div style="padding: 10px 0 0 0;">
+                <button type="button" class="btn btn-secondary prev">Previous</button>
+                <button type="button" class="btn btn-success next">Next</button>
+              </div>
+
+          </div>
+
+   <!--########################################## FORM 3 ##########################################################################-->
+
+            <div class="step-form" id="step3">
+
+              <h2 style="text-align: center; color: navy;" id="obj_desc_heading"> OBJECT DESCRIPTION  </h2>
+
+              
+
+              <div class="form-row row" style="padding: 5px 0;">
+                <!-------------------------Material Construction --------------------------------------------------------------->
+
+                <div class="form-group col-md-2">
+
+                  <select name="material" multiple="" class="ui fluid dropdown" id="material">
+                      <option value="">Select Tools</option>
+                      <% 
+                      // Define the known materials
+                      const knownMaterials = ['Material 1', 'Material 2', 'Material 3'];
+                      const usedMaterials = report.Object_description.Material;
+
+                      // Combine known materials and used materials, then filter out duplicates
+                      const allMaterials = [...new Set([...knownMaterials, ...usedMaterials])];
+
+                      // Iterate over all unique tools and create options
+                      allMaterials.forEach(material => {
+                      %>
+                      <option value="<%= material %>" <%= usedMaterials.includes(material) ? 'selected' : '' %>><%= material %></option>
+                     <% }); %>
+                  </select>
+
+                </div>
+
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control" id="exampleInputTextMaterial" placeholder="Enter new material">
+                </div>
+    
+                <div class="form-group col-md-1">
+                  <button type="button" class="btn btn-primary" id="buttonForAddMaterial">Add</button>
+                </div>
+
+                
+                <!----------------------- Material Construction ---------------------------------------------------------------->
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control" id="structure" name="structure" placeholder="" value="<%= report.Object_description.Structure %>">
+                </div>
+
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control" id="surface" name="surface" placeholder="" value="<%= report.Object_description.Surface %>">
+                </div>
+
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control" id="history" name="history" placeholder="" value="<%= report.Object_description.History %>">
+                </div>
+ 
+              </div>
+
+              <div class="form-row row" style="padding: 5px 0;">
+
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control" name="technique" id="technique" placeholder="" value="<%= report.Object_description.Technique %>">
+                </div>
+
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control"  name="weight" id="weight" placeholder="" value="<%= report.Object_description.Weight %>">
+                </div>
+
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control"  name="contituent_elements" id="contituent_elements" placeholder="" value="<%= report.Object_description.Constituent_elements %>">
+                </div>
+
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control" name="no_of_items" id="no_of_items" placeholder="Number of items" value="<%= report.Object_description.No_of_items %>">
+                </div>
+    
+              </div>
+
+              <div class="form-row row" style="padding: 5px 0;">
+
+                <div class="col-md-1">
+                  <label  class="col-form-label" for="" id="">Height</label>
+                </div>
+  
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control" id="heights" name="heights"  placeholder="" value="<%= report.Object_description.Heights %>">
+                </div>
+
+               
+                <div class="form-group col-md-1">
+
+                  <select class="form-select" aria-label="Default select example" name="heightUnits" id="heightUnits" >
+                    <option value="">Units</option>
+                    <option value="cm">cm</option>
+                    <option value="m">m</option>
+                  </select>
+
+                </div>
+         
+
+
+                <div class="col-md-1">
+                  <label  class="col-form-label" for="" id="">Width</label>
+                </div>
+
+                <div class="form-group col-md-2">
+                  <input type="text" class="form-control" id="width" name="width" placeholder="" value="<%= report.Object_description.Width %>">
+                </div>
+
+             
+                <div class="form-group col-md-1">
+
+                  <select class="form-select" aria-label="Default select example" name="widthUnits" id="widthUnits" >
+                    <option value="">Units</option>
+                    <option value="cm">cm</option>
+                    <option value="m">m</option>
+                  </select>
+
+                </div>
+            
+              </div>
+
+              <hr>
+              <div class="form-row row" >
+
+                <div class="form-group col-md-6">
+                  <textarea class="form-control" id="installation_notes" rows="2" name="installation_notes" placeholder=""><%= report.Object_description.Installation_notes %></textarea>
+                </div>
+
+                <div class="form-group col-md-6">
+                  <textarea class="form-control" id="artist_installation_guide" rows="2" name="artist_installation_guide" placeholder=""><%= report.Object_description.Artist_installation_guide %></textarea>
+                </div>
+
+                <div class="form-group col-md-6" style="margin-top: 10px;">
+                  <textarea class="form-control" id="object_creation_description" rows="2" name = "object_creation_description" placeholder=""><%= report.Object_description.Object_creation_description %></textarea>
+                </div>
+          
+              </div>
+        
+              <hr>
+
+              <h6  id="normal_upload"> Upload photo/Video</h6>
+        
+        
+              <div class="form-row row ">
+
+                <div class="form-group col-md-6">
+                  <input type="file" name="ImageFile" multiple class="form-control" id="inputGroupFile02" onchange="displayUploadMessage()">
+                </div>
+
+                <div id="previewContainer" style="display: flex; flex-wrap: wrap; margin-top: 10px;">
+                   <!--preview will come here -->
+                </div>
+
+                
+              </div>
+        
+              <div style="padding: 10px 0 0 0;">
+                  <button type="button" class="btn btn-secondary prev">Previous</button>
+                  <button type="button" class="btn btn-success next">Next</button>
+              </div>
+
+            </div>
+        
+  <!---################################# FORM 4 ###################################################################################################--->
+        
+            <div class="step-form" id="step4">
+
+              <h2 style="text-align: center; color: navy;" id="obj_env_heading">  OBJECT ENVIRONMENT </h2>
+
+              <div class="form-row row" style="padding: 5px 0;">
+                <div class="form-group col-md-6" >
+                  <textarea class="form-control" id="environment" name="environment" rows="4" placeholder=""><%= report.Object_environment.Environment %></textarea>
+                </div>
+              </div>
+        
+              <div class="form-row row" style="padding: 5px 0;">
+                <div class="form-group col-md-6" >
+                  <textarea class="form-control" id="effect" name="effect" rows="4" placeholder=""><%= report.Object_environment.Effect %></textarea>
+                </div>
+              </div>
+        
+              <div style="padding: 10px 0 0 0;">
+                <button type="button" class="btn btn-secondary prev">Previous</button>
+                <button type="button" class="btn btn-success next">Next</button>
+              </div>
+
+            </div>
+        
+    <!---################################# FORM 5 ###################################################################################################--->
+
+            <div class="step-form" id="step5">
+
+                <h2 style="text-align: center; color: navy;" id="cond_desc_heading">  CONDITIONS DESCRIPTION (OBEJCT) </h2>
+        
+                <div class="form-row row" style="padding: 5px 0;">
+                  <div class="form-group col-md-6" >
+                    <textarea class="form-control" id="info_observed" name="info_observed" rows="4" placeholder=""><%= report.Conditions_description.Info_observed %></textarea>
+                  </div>
+                </div>
+
+                <hr>
+                
+
+                <p id="Cc_label" style="padding: 5px 0; font-size: small; color: purple"> Please fill this if the condition of an item is known or suspected to have changed from an earlier or original state </p>
+        
+                <div class="form-group col-md-6">
+                  <textarea class="form-control" id="report_change" name="report_change" rows="4" placeholder=""><%= report.Conditions_description.Report_change %></textarea>
+                </div>
+        
+                <hr>
+                <h6  id="damaged_upload" style="padding: 5px 0;"> Damaged Observed ?  Please upload photos</h6>
+        
+                <div class="form-row row">
+                  <div class="form-group col-md-6">
+                    <input type="file" name="ImageFile2" multiple class="form-control" id="inputGroupFile04" onchange="displayUploadMessage2()">
+                  </div>
+
+                  <div id="previewContainer1" style="display: flex; flex-wrap: wrap; margin-top: 10px;">
+                    <!--preview will come here -->
+                 </div>
+                </div>
+                
+                 <div style="padding: 10px 0 0 0;">
+                   <button type="button" class="btn btn-secondary prev">Previous</button>
+                   <button type="button" class="btn btn-success next">Next</button>
+                 </div>
+
+            </div>
+           
+              
+  <!----################################# FORM 6 ##################################################################---->
+
+            <div class="step-form" id="step6">
+
+              <h2 style="text-align: center; color: navy;" id="diag_recc_heading"> DIAGNOSTIC AND RECOMMENDATIONS  </h2>
+              
+              <div class="form-row row" style="padding: 5px 0;">
+                <div class="form-group col-md-6" >
+                  <textarea class="form-control" id="descriptive_diagnosis" rows="4" name="descriptive_diagnosis" placeholder=""><%= report.Diagnostic_and_recommendations.Descriptive_diagnosis %></textarea>
+                </div>
+             
+                <div class="form-group col-md-6" >
+                  <textarea class="form-control" id="recommendations" rows="4" name="recommendations" placeholder=""><%= report.Diagnostic_and_recommendations.Recommendations %></textarea>
+                </div>
+              </div>
+
+              <hr>
+              <p id="optionalInfo" style="font-size: small; color: purple;">
+                &nbsp;&nbsp;<i class="fas fa-info-circle" ></i> <!-- Font Awesome circular info icon -->
+                (Optional) fill only if information necessary for an immediate diagnosis is not available
+              </p>
+        
+              <div class="form-row row" style="padding: 5px 0;" >
+                <div class="form-group col-md-6" >
+                  <textarea class="form-control" id="investigations" rows="4" name="investigations" placeholder=""><%= report.Diagnostic_and_recommendations.Investigations %></textarea>
+                </div>
+              </div>
+                
+              
+                 
+              <div style="padding: 10px 0 0 0;">
+                <button type="button" class="btn btn-secondary prev">Previous</button>
+             
+                <button type="button" class="btn btn-primary"  onclick="viewSummary('UpdateForm')">Verify</button>
+              </div>
+
+            </div>
+
+
+<!----####################################################################################################################################-------------------->
+
+        <!--MODAL-->
+
+        <div class="modal fade" id="summaryModal" tabindex="-1" role="dialog" aria-labelledby="summaryModalLabel" aria-hidden="true" >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: black; color: white;">
+               
+                <h5 class="modal-title" id="summaryModalLabel"><strong>VERIFICATION OF DETAILS ENTERED</strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+
+                <div id="summaryDiv"></div>
+                <!--DATA WILL BE APPENDED HERE-->   
+
+                      
+              </div>
+             
+              <div class="modal-footer">
+
+                 
+                <button type="button" class="btn btn-secondary" id="button_close" onclick="closeModal()" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-dark" style="float: right;">Update</button>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      
+
+        <!--MODAL-->
+
+      <!------------------------------------------------------------------------------------------------------------------------>
+        
+      </form>
+        
+    </div>
+    
+    <!----------------------------  END OF CONTAINER DIV --------------------------------------------------------------------------------------------->
+
+
+
+
+
+   
+
+
+    <script  src="/language.js"></script>
+    <script  src="/logic.js"></script>
+
+    <script>
+  
+
+      $('.ui.dropdown')
+      .dropdown()
+      ;
+
+      document.addEventListener('DOMContentLoaded', function() {
+
+      //******* FOR HEIGHT ***************************************
+
+      const heightsInput = document.getElementById('heights');
+        let heightsValue = heightsInput.value;
+        removedUnitHeights=''
+
+        // Check and remove 'cm' or 'm' from the value
+        if (heightsValue.endsWith('cm')) {
+         heightsValue = heightsValue.slice(0, -2);
+          removedUnitHeights = 'cm';
+        } else if (heightsValue.endsWith('m')) {
+        heightsValue = heightsValue.slice(0, -1);
+        removedUnitHeights = 'm';
+        }
+        console.log('height rempved', removedUnitHeights)
+        // Update the input value without units
+        heightsInput.value = heightsValue;
+
+        // Select the corresponding option in the dropdown
+        const heightUnitsSelect = document.getElementById('heightUnits');
+        let options = heightUnitsSelect.options;
+        for (let i = 0; i < options.length; i++) {
+      
+        if (options[i].value === removedUnitHeights) {
+            options[i].selected = true;
+        } else {
+            options[i].selected = false;
+        }
+      }
+
+
+      //******* FOR WIDTH ***************************************
+        const widthInput = document.getElementById('width');
+        let widthValue = widthInput.value;
+        removedUnitWidth='';
+
+        // Check and remove 'cm' or 'm' from the value
+        if (widthValue.endsWith('cm')) {
+          widthValue = widthValue.slice(0, -2);
+          removedUnitWidth = 'cm';
+        } else if (widthValue.endsWith('m')) {
+          widthValue = widthValue.slice(0, -1);
+          removedUnitWidth = 'm';
+        }
+        console.log('width rempved', removedUnitWidth)
+        // Update the input value without units
+        widthInput.value = widthValue;
+
+        // Select the corresponding option in the dropdown
+        const widthUnitsSelect = document.getElementById('widthUnits');
+        let optionss = widthUnitsSelect.options;
+        for (let i = 0; i < optionss.length; i++) {
+      
+        if (optionss[i].value === removedUnitWidth) {
+            optionss[i].selected = true;
+        } else {
+            optionss[i].selected = false;
+        }
+    }
+  
+    
+    });
+
+
+    </script>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+
+
+    </body>
+
+  </html>
