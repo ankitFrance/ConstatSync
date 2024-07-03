@@ -73,7 +73,7 @@
   <ul style="list-style-type: none;">
     <% 
       const basicInfoFields = ['Institution',  'Tools', 'Methods', 'Purpose_of_condition_report', 'Name_of_client', 'Reliability_collected_data', 'Cmnt_reliabilty'];
-      const workingConditionFields = ['Height', 'Examination_center', 'Platform', 'Behind_glass', 'Quantity', 'Quality', 'Type', 'Support', 'Assets', 'Protection_Used'];
+      const workingConditionFields = ['Height', 'Examination_distance', 'Structural_framework', 'Under_glass', 'Quantity', 'Quality', 'Type', 'Support', 'Assets', 'Protection_Used'];
       const additionalDetailsFields = ['Person_present_during_inspection', 'Contact_person_inspection', 'Duration_of_assessment', 'Inaccessibility'];
 
       const hasBasicInfo = basicInfoFields.some(key => ReportAfterUpdate.Reporting_Information[key] && (!Array.isArray(ReportAfterUpdate.Reporting_Information[key]) || ReportAfterUpdate.Reporting_Information[key].length > 0));
@@ -99,7 +99,7 @@
       <% workingConditionFields.forEach(key => { 
         const value = ReportAfterUpdate.Reporting_Information[key];
         if (value && (!Array.isArray(value) || value.length > 0)) {
-          const displayName = (key === 'Height') ? 'Height' : (key === 'Examination_center') ? 'Examination distance' : (key === 'Platform') ? 'Platform' : (key === 'Behind_glass') ? 'Behind mirror' : (key === 'Quantity') ? 'Quantity' : (key === 'Quality') ? 'Quality' : (key === 'Type') ? 'Type' : (key === 'Support') ? 'Support' : (key === 'Assets') ? 'Assets Used' : (key === 'Protection_Used') ? 'Protection Used' : '';
+          const displayName = (key === 'Height') ? 'Height' : (key === 'Examination_distance') ? 'Examination distance' : (key === 'Structural_framework') ? 'Structural framework' : (key === 'Under_glass') ? 'Under glass' : (key === 'Quantity') ? 'Quantity' : (key === 'Quality') ? 'Quality' : (key === 'Type') ? 'Type' : (key === 'Support') ? 'Support' : (key === 'Assets') ? 'Assets Used' : (key === 'Protection_Used') ? 'Protection Used' : '';
       %>
         <li>
           <strong><%= displayName %>:</strong> <%= Array.isArray(value) ? value.join(', ') : value %>

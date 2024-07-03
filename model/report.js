@@ -44,13 +44,13 @@ const reportSchema = new mongoose.Schema({
         Height:{
             type: String
         }, 
-        Examination_center:{
+        Examination_distance:{
             type: String
         }, 
-        Platform:{
+        Structural_framework:{
             type: String
         }, 
-        Behind_glass:{
+        Under_glass:{
             type: String
         }, 
         Quantity:{

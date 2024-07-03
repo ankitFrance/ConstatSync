@@ -742,9 +742,9 @@ function viewSummary(formId) {
   const purpose_of_condition_report = document.getElementById('purpose_of_condition_report').value;
   const name_of_client = document.getElementById('name_of_client').value;
   const height = document.getElementById('height').value;
-  const examination_center = document.getElementById('examination_center').value;
-  const platform = document.getElementById('platform').value;
-  const behind_glass = document.getElementById('behind_glass').value;
+  const examination_distance = document.getElementById('examination_distance').value;
+  const structural_framework = document.getElementById('structural_framework').value;
+  const under_glass = document.getElementById('under_glass').value;
   const quantity = document.getElementById('quantity').value;
   const quality = document.getElementById('quality').value;
   const type = document.getElementById('type').value;
@@ -840,9 +840,9 @@ function viewSummary(formId) {
   <p><strong> Purpose of Condition Report:</strong> ${purpose_of_condition_report} </p>
   <p><strong> Name of Client :</strong> ${name_of_client} </p>
   <p><strong> Height:</strong> ${height} </p>
-  <p><strong> Examination center:</strong> ${examination_center} </p>
-  <p><strong> Platform:</strong> ${platform} </p>
-  <p><strong> Behind glass:</strong> ${behind_glass} </p>
+  <p><strong> Examination Distance:</strong> ${examination_distance} </p>
+  <p><strong> Structural Framework:</strong> ${structural_framework} </p>
+  <p><strong> Under glass ?:</strong> ${under_glass} </p>
   <p><strong> Quantity:</strong> ${quantity} </p>
   <p><strong> Quality:</strong> ${quality} </p>
   <p><strong> Type:</strong> ${type} </p>
@@ -1002,9 +1002,9 @@ function changeLanguage() {
   document.getElementById('purpose_of_condition_report').placeholder = i18n[selectedLanguage].Purpose_of_Condition_Report;
   document.getElementById('name_of_client').placeholder = i18n[selectedLanguage].Name_of_Client;
   document.getElementById('height').placeholder = i18n[selectedLanguage].Height;
-  document.getElementById('examination_center').placeholder = i18n[selectedLanguage].Examination_Center;
-  document.getElementById('platform').placeholder = i18n[selectedLanguage].Platform;
-  document.getElementById('behind_glass').placeholder = i18n[selectedLanguage].Behind_Mirror;
+  document.getElementById('examination_distance').placeholder = i18n[selectedLanguage].Examination_distance;
+  document.getElementById('structural_framework').placeholder = i18n[selectedLanguage].Structural_framework;
+  document.getElementById('under_glass').placeholder = i18n[selectedLanguage].Under_glass;
   document.getElementById('quantity').placeholder = i18n[selectedLanguage].Quantity;
   document.getElementById('quality').placeholder = i18n[selectedLanguage].Quality;
   document.getElementById('type').placeholder = i18n[selectedLanguage].Type;
