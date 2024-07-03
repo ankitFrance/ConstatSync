@@ -811,146 +811,296 @@ function viewSummary(formId) {
   const recommendations = document.getElementById('recommendations').value;
   const investigations = document.getElementById('investigations').value;
 
+  // Check which language is selected 
+  const selectedLanguage = document.getElementById('languageSelect').value;
+  if (selectedLanguage === 'en')
+    {
+      var summaryText = `
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      REPORTING INFORMATION 
+      <i id="pencil1" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
+      <p><strong> Name:</strong> ${name} </p>
+      <p><strong> Role:</strong> ${role} </p>
+      <p><strong> Institution:</strong> ${institution} </p>
+      `;
 
-  var summaryText = `
-  <div style="position: relative;">
-  <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
-  REPORTING INFORMATION 
-  <i id="pencil1" class="fas fa-pencil-alt" style="float: right;"></i>
-  </h5> 
-  <hr style="border-color: darkblue; margin-top: 0;">
-  </div>
-  <p><strong> Name:</strong> ${name} </p>
-  <p><strong> Role:</strong> ${role} </p>
-  <p><strong> Institution:</strong> ${institution} </p>
-  `;
+      if (doi) {
+      summaryText += `<p><strong> Date of Inspection:</strong> ${doi} </p>`;
+      }
 
-  if (doi) {
-  summaryText += `<p><strong> Date of Inspection:</strong> ${doi} </p>`;
-  }
+      if (doii) {
+      summaryText += `<p><strong> Date of Inspection:</strong> ${doii} </p>`;
+      }
 
-  if (doii) {
-  summaryText += `<p><strong> Date of Inspection:</strong> ${doii} </p>`;
-  }
+      summaryText += `
 
-  summaryText += `
+      <p><strong> Tools:</strong> ${tools} </p>
+      <p><strong> Methods:</strong> ${methods} </p>
+      <p><strong> Purpose of Condition Report:</strong> ${purpose_of_condition_report} </p>
+      <p><strong> Name of Client :</strong> ${name_of_client} </p>
+      <p><strong> Height:</strong> ${height} </p>
+      <p><strong> Examination Distance:</strong> ${examination_distance} </p>
+      <p><strong> Structural Framework:</strong> ${structural_framework} </p>
+      <p><strong> Under glass ?:</strong> ${under_glass} </p>
+      <p><strong> Quantity:</strong> ${quantity} </p>
+      <p><strong> Quality:</strong> ${quality} </p>
+      <p><strong> Type:</strong> ${type} </p>
+      <p><strong> Assets used:</strong> ${assets} </p>
+      <p><strong> Protection used:</strong> ${protectionUsed} </p>
 
-  <p><strong> Tools:</strong> ${tools} </p>
-  <p><strong> Methods:</strong> ${methods} </p>
-  <p><strong> Purpose of Condition Report:</strong> ${purpose_of_condition_report} </p>
-  <p><strong> Name of Client :</strong> ${name_of_client} </p>
-  <p><strong> Height:</strong> ${height} </p>
-  <p><strong> Examination Distance:</strong> ${examination_distance} </p>
-  <p><strong> Structural Framework:</strong> ${structural_framework} </p>
-  <p><strong> Under glass ?:</strong> ${under_glass} </p>
-  <p><strong> Quantity:</strong> ${quantity} </p>
-  <p><strong> Quality:</strong> ${quality} </p>
-  <p><strong> Type:</strong> ${type} </p>
-  <p><strong> Assets used:</strong> ${assets} </p>
-  <p><strong> Protection used:</strong> ${protectionUsed} </p>
-
-  <p><strong> Reliability of collected data ?:</strong> ${reliability_collected_data} </p>
-  <p><strong> Support ?:</strong> ${support} </p>
-  <p><strong> Comment on reliability of data:</strong> ${cmnt_reliabilty} </p>
-  <p><strong> Person(s) present during the inspection :</strong> ${person_present_during_inspection} </p>
-  <p><strong> Contact persons for the inspection :</strong> ${contact_person_inspection} </p>
-  <p><strong> Time used to complete the survey:</strong> ${duration_of_assessment} </p>
-  <p><strong> Inaccessibility of parts of Asset:</strong> ${inaccessibility} </p>
-
-
-
-  <div style="position: relative;">
-  <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
-  OBJECT IDENTIFICATION
-  <i id="pencil2" class="fas fa-pencil-alt" style="float: right;"></i>
-  </h5> 
-  <hr style="border-color: darkblue; margin-top: 0;">
-  </div>
-  <p><strong> Identification Number:</strong> ${identification_no} </p>
-  <p><strong> Date of Acquisition:</strong> ${date_of_acquisition} </p>
-  <p><strong> Title:</strong> ${title} </p>
-  <p><strong> Authors:</strong> ${author} </p>
-  <p><strong> Date of creation :</strong> ${date_of_creation} </p>
-  <p><strong> Ownership:</strong> ${ownership} </p>
-  <p><strong> Protection:</strong> ${protection} </p>
-  <p><strong> Summary:</strong> ${summary} </p>
+      <p><strong> Reliability of collected data ?:</strong> ${reliability_collected_data} </p>
+      <p><strong> Support ?:</strong> ${support} </p>
+      <p><strong> Comment on reliability of data:</strong> ${cmnt_reliabilty} </p>
+      <p><strong> Person(s) present during the inspection :</strong> ${person_present_during_inspection} </p>
+      <p><strong> Contact persons for the inspection :</strong> ${contact_person_inspection} </p>
+      <p><strong> Time used to complete the survey:</strong> ${duration_of_assessment} </p>
+      <p><strong> Inaccessibility of parts of Asset:</strong> ${inaccessibility} </p>
 
 
 
-  <div style="position: relative;">
-  <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
-  OBJECT DESCRIPTION 
-  <i id="pencil3" class="fas fa-pencil-alt" style="float: right;"></i>
-  </h5> 
-  <hr style="border-color: darkblue; margin-top: 0;">
-  </div>
-
-  <p><strong> Materials:</strong> ${material} </p>
-  <p><strong> Structure:</strong> ${structure} </p>
-  <p><strong> Surface:</strong> ${surface} </p>
-  <p><strong> History:</strong> ${history} </p>
-  <p><strong> Technique:</strong> ${technique} </p>
-  <p><strong> Weight:</strong> ${weight} </p>
-  <p><strong> Constituent Elements:</strong> ${contituent_elements} </p>
-  <p><strong> Number of items :</strong> ${no_of_items} </p>
-  <p><strong> Height:</strong> ${heights} ${heightUnits} </p>
-  <p><strong> Width:</strong> ${width} ${widthUnits} </p>
-  <p><strong> Installation Notes:</strong> ${installation_notes} </p>
-  <p><strong> Artist installation guide:</strong> ${artist_installation_guide} </p>
-  <p><strong> Object creation description:</strong> ${object_creation_description} </p>
-  <div>
-  ${imagesHTML}
-  </div>
-
-
-  <div style="position: relative;">
-  <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
-  OBJECT ENVIRONMENT
-  <i id="pencil4" class="fas fa-pencil-alt" style="float: right;"></i>
-  </h5> 
-  <hr style="border-color: darkblue; margin-top: 0;">
-  </div>
-
-  <p><strong> Environment in which item is held:</strong> ${environment} </p>
-  <p><strong> Effect of Environment on object:</strong> ${effect} </p>
-
-
-  <div style="position: relative;">
-  <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
-  CONDITIONS DESCRIPTION (OBEJCT)
-  <i id="pencil5" class="fas fa-pencil-alt" style="float: right;"></i>
-  </h5> 
-  <hr style="border-color: darkblue; margin-top: 0;">
-  </div>
-
-  <p><strong> Information observed concerning current state of item :</strong> ${info_observed} </p>
-  <p><strong> Please report the change (repair, treatment):</strong> ${report_change} </p>
-  <div>
-  ${imagesHTML2}
-  </div>
-
-  <div style="position: relative;">
-  <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
-  DIAGNOSTIC AND RECOMMENDATIONS
-  <i id="pencil6" class="fas fa-pencil-alt" style="float: right;"></i>
-  </h5> 
-  <hr style="border-color: darkblue; margin-top: 0;">
-  </div>
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      OBJECT IDENTIFICATION
+      <i id="pencil2" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
+      <p><strong> Identification Number:</strong> ${identification_no} </p>
+      <p><strong> Date of Acquisition:</strong> ${date_of_acquisition} </p>
+      <p><strong> Title:</strong> ${title} </p>
+      <p><strong> Authors:</strong> ${author} </p>
+      <p><strong> Date of creation :</strong> ${date_of_creation} </p>
+      <p><strong> Ownership:</strong> ${ownership} </p>
+      <p><strong> Protection:</strong> ${protection} </p>
+      <p><strong> Summary:</strong> ${summary} </p>
 
 
 
-  <p><strong> Descriptive diagnosis of reason for deterioration :</strong> ${descriptive_diagnosis} </p>
-  <p><strong> Recommendations for further care and / or conservation:</strong> ${recommendations} </p>
-  <p><strong> Further scientific, historical, technical or other investigation or analysis:</strong> ${investigations} </p>
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      OBJECT DESCRIPTION 
+      <i id="pencil3" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
 
-  `;
+      <p><strong> Materials:</strong> ${material} </p>
+      <p><strong> Structure:</strong> ${structure} </p>
+      <p><strong> Surface:</strong> ${surface} </p>
+      <p><strong> History:</strong> ${history} </p>
+      <p><strong> Technique:</strong> ${technique} </p>
+      <p><strong> Weight:</strong> ${weight} </p>
+      <p><strong> Constituent Elements:</strong> ${contituent_elements} </p>
+      <p><strong> Number of items :</strong> ${no_of_items} </p>
+      <p><strong> Height:</strong> ${heights} ${heightUnits} </p>
+      <p><strong> Width:</strong> ${width} ${widthUnits} </p>
+      <p><strong> Installation Notes:</strong> ${installation_notes} </p>
+      <p><strong> Artist installation guide:</strong> ${artist_installation_guide} </p>
+      <p><strong> Object creation description:</strong> ${object_creation_description} </p>
+      <div>
+      ${imagesHTML}
+      </div>
+
+
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      OBJECT ENVIRONMENT
+      <i id="pencil4" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
+
+      <p><strong> Environment in which item is held:</strong> ${environment} </p>
+      <p><strong> Effect of Environment on object:</strong> ${effect} </p>
+
+
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      CONDITIONS DESCRIPTION (OBEJCT)
+      <i id="pencil5" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
+
+      <p><strong> Information observed concerning current state of item :</strong> ${info_observed} </p>
+      <p><strong> Please report the change (repair, treatment):</strong> ${report_change} </p>
+      <div>
+      ${imagesHTML2}
+      </div>
+
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      DIAGNOSTIC AND RECOMMENDATIONS
+      <i id="pencil6" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
 
 
 
-  document.getElementById('summaryDiv').innerHTML = summaryText;
+      <p><strong> Descriptive diagnosis of reason for deterioration :</strong> ${descriptive_diagnosis} </p>
+      <p><strong> Recommendations for further care and / or conservation:</strong> ${recommendations} </p>
+      <p><strong> Further scientific, historical, technical or other investigation or analysis:</strong> ${investigations} </p>
 
-  let summaryModal = new bootstrap.Modal(document.getElementById('summaryModal'));
-  summaryModal.show();
+      `;
+
+
+
+      document.getElementById('summaryDiv').innerHTML = summaryText;
+
+      let summaryModal = new bootstrap.Modal(document.getElementById('summaryModal'));
+      summaryModal.show();
+
+    } else {
+
+      var summaryTextFr = `
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      INFORMATIONS SUR LE CONSTAT
+      <i id="pencil1" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
+      <p><strong> Nom de l'auteur:</strong> ${name} </p>
+      <p><strong> Fonction:</strong> ${role} </p>
+      <p><strong> Institution:</strong> ${institution} </p>
+      `;
+
+      if (doi) {
+      summaryTextFr += `<p><strong> Date de l'inspection:</strong> ${doi} </p>`;
+      }
+
+      if (doii) {
+      summaryTextFr += `<p><strong> Date de l'inspection:</strong> ${doii} </p>`;
+      }
+
+      summaryTextFr += `
+
+      <p><strong> Outils:</strong> ${tools} </p>
+      <p><strong> Méthodes:</strong> ${methods} </p>
+      <p><strong> Objectif du constat d'état:</strong> ${purpose_of_condition_report} </p>
+      <p><strong> Nom du client/commanditaire :</strong> ${name_of_client} </p>
+      <p><strong> Hauteur:</strong> ${height} </p>
+      <p><strong> Distance d'examen:</strong> ${examination_distance} </p>
+      <p><strong> Structure portante:</strong> ${structural_framework} </p>
+      <p><strong> Under glass ?:</strong> ${under_glass} </p>
+      <p><strong> Quantité:</strong> ${quantity} </p>
+      <p><strong> Qualité:</strong> ${quality} </p>
+      <p><strong> Genre:</strong> ${type} </p>
+      <p><strong> Actifs utilisés:</strong> ${assets} </p>
+      <p><strong> Protection utilisée:</strong> ${protectionUsed} </p>
+
+      <p><strong> Fiabilité des données collectées ?:</strong> ${reliability_collected_data} </p>
+      <p><strong> Support ?:</strong> ${support} </p>
+      <p><strong> Commentaire sur la fiabilité des données:</strong> ${cmnt_reliabilty} </p>
+      <p><strong> Personne(s) présente(s) lors de l'inspection :</strong> ${person_present_during_inspection} </p>
+      <p><strong> Personnes de contact pour l'inspection :</strong> ${contact_person_inspection} </p>
+      <p><strong> Durée de l'évaluation:</strong> ${duration_of_assessment} </p>
+      <p><strong> Partie(s) inaccessible(s):</strong> ${inaccessibility} </p>
+
+
+
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      IDENTIFICATION DU BIEN
+      <i id="pencil2" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
+      <p><strong> Numéro d'identification:</strong> ${identification_no} </p>
+      <p><strong> Date de l'acquisition:</strong> ${date_of_acquisition} </p>
+      <p><strong> Titre:</strong> ${title} </p>
+      <p><strong> Auteur/Créateur:</strong> ${author} </p>
+      <p><strong> Date de création :</strong> ${date_of_creation} </p>
+      <p><strong> Propriété même si inconnu:</strong> ${ownership} </p>
+      <p><strong> Informations sur les protections:</strong> ${protection} </p>
+      <p><strong> Intérêt patrimonial (résumé):</strong> ${summary} </p>
+
+
+
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      DESCRIPTION DU BIEN 
+      <i id="pencil3" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
+
+      <p><strong> Matériaux:</strong> ${material} </p>
+      <p><strong> Structures:</strong> ${structure} </p>
+      <p><strong> Surfaces:</strong> ${surface} </p>
+      <p><strong> Histoire:</strong> ${history} </p>
+      <p><strong> Technique(s):</strong> ${technique} </p>
+      <p><strong> Poids:</strong> ${weight} </p>
+      <p><strong> Éléments constitutifs:</strong> ${contituent_elements} </p>
+      <p><strong> Nombre d'objets :</strong> ${no_of_items} </p>
+      <p><strong> Hauteur:</strong> ${heights} ${heightUnits} </p>
+      <p><strong> Largeur:</strong> ${width} ${widthUnits} </p>
+      <p><strong> Notes d'installation:</strong> ${installation_notes} </p>
+      <p><strong> Guide d'installation de l'artiste:</strong> ${artist_installation_guide} </p>
+      <p><strong> Description de la création de l'objet:</strong> ${object_creation_description} </p>
+      <div>
+      ${imagesHTML}
+      </div>
+
+
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      ENVIRONNEMENT DU BIEN
+      <i id="pencil4" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
+
+      <p><strong> Environnement dans lequel le bien est conservé:</strong> ${environment} </p>
+      <p><strong> Effet de l'environnement sur le bien:</strong> ${effect} </p>
+
+
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      DESCRIPTION DE L'ÉTAT DU BIEN
+      <i id="pencil5" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
+
+      <p><strong> Informations observées concernant l'état actuel du bien y compris l'historique de sa conservation :</strong> ${info_observed} </p>
+      <p><strong> Veuillez signaler le changement (réparation, traitement):</strong> ${report_change} </p>
+      <div>
+      ${imagesHTML2}
+      </div>
+
+      <div style="position: relative;">
+      <h5 style="color: white; background-color: green; padding: 10px; margin-bottom: 0;"> 
+      DIAGNOSTIC ET RECOMMANDATIONS
+      <i id="pencil6" class="fas fa-pencil-alt" style="float: right;"></i>
+      </h5> 
+      <hr style="border-color: darkblue; margin-top: 0;">
+      </div>
+
+
+
+      <p><strong> Diagnostic descriptif de la raison de la détérioration / Autres changements d'état :</strong> ${descriptive_diagnosis} </p>
+      <p><strong> Recommandations pour des soins et/ou une conservation ultérieurs:</strong> ${recommendations} </p>
+      <p><strong> Autres investigations ou analyses scientifiques, historiques, techniques ou autres:</strong> ${investigations} </p>
+
+      `;
+
+
+
+      document.getElementById('summaryDiv').innerHTML = summaryTextFr;
+
+      let summaryModal = new bootstrap.Modal(document.getElementById('summaryModal'));
+      summaryModal.show();
+
+
+
+    }
+  
 
   }
 
