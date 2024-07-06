@@ -227,6 +227,7 @@ document.getElementById('FetchJOCONDE').addEventListener('click', function() {
   var identificationNumber = document.getElementById('identification_no').value;
 
   var apiUrl = 'https://data.culture.gouv.fr/api/explore/v2.1/catalog/datasets/base-joconde-extrait/records?select=*&where=reference%20like%20%22'+ encodeURIComponent(identificationNumber) +'%22';
+
   var artiste = document.getElementById('author');
   var titre_ou_designation = document.getElementById('title');
   var Hauteur = document.getElementById('heights');
@@ -296,9 +297,13 @@ document.getElementById('FetchJOCONDE').addEventListener('click', function() {
 
 
 
-//**********************************************************************************************************************************
 
 
+//**********************************************************FETCH FROM LOUVRE************************************************************************* */
+
+
+
+//*********************************************************************************************************************************************** */
 
 
 

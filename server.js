@@ -3,8 +3,12 @@ const app = express();
 const  mongoose  = require("mongoose");
 
 
+
+
 app.set('view engine', 'ejs');
 app.use(express.static('public'));  // for css and javascript
+
+
     
             
 app.use(express.urlencoded({extended: false}))   //help to use the form data
