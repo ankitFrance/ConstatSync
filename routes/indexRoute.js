@@ -4,6 +4,7 @@ const multer  = require('multer')
 const Report = require('../model/report')
 const fs = require('fs');
 const path = require('path');
+const axios = require ('axios')
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -500,6 +501,24 @@ router.get('/', (req, res) => {
 
 /************************************************************************************************************************************ */
 
+
+  router.get('/DataFromLouvre/:identificationNumber', async (req, res) => {
+    const identificationNumber = req.params.identificationNumber;
+    const url = 'https://collections.louvre.fr/en/ark:/53355/'+identificationNumber+'.json';
+    
+    try {
+      const response = await axios.get(url);
+     // res.status(200).json({'result': response.data});
+      res.send( response.data); // Sends JSON response
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({'error': 'Error getting the url'});
+    }
+      
+  });
+
+
+/************************************************************************************************************************************ */
 module.exports = router; 
 
 
