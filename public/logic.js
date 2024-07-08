@@ -305,15 +305,21 @@ document.getElementById('FetchLOUVRE').addEventListener('click', async function(
 
   try {
     var identificationNumber = document.getElementById('identification_no').value;
+   
     const response = await axios.get(`/DataFromLouvre/${identificationNumber}`);
     const data = response.data;
     console.log(data)
 
-    // Assuming the JSON has a title field
+    // filling of title field
     var titre_ou_designation = document.getElementById('title');
-    const title = data.title;
-    titre_ou_designation.value = title;
+    var titleStore = data.title;
+    titre_ou_designation.value = titleStore;
 
+    // filling of Author/Creator field
+    var artiste = document.getElementById('author');
+    var authorStore = data.creator[0].label
+    artiste.value = authorStore;
+   
     
   } catch (error) {
     console.error('Error fetching data:', error);
