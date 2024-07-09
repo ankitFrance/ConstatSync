@@ -303,6 +303,11 @@ document.getElementById('FetchJOCONDE').addEventListener('click', function() {
 
 document.getElementById('FetchLOUVRE').addEventListener('click', async function() {
 
+  var titre_ou_designation = document.getElementById('title');
+  var artiste = document.getElementById('author');
+  var Hauteur = document.getElementById('heights');
+  var Largeur = document.getElementById('width')
+
   try {
     var identificationNumber = document.getElementById('identification_no').value;
    
@@ -311,18 +316,44 @@ document.getElementById('FetchLOUVRE').addEventListener('click', async function(
     console.log(data)
 
     // filling of title field
-    var titre_ou_designation = document.getElementById('title');
+   
     var titleStore = data.title;
     titre_ou_designation.value = titleStore;
 
     // filling of Author/Creator field
-    var artiste = document.getElementById('author');
+    
     var authorStore = data.creator[0].label
     artiste.value = authorStore;
+
+    // filling of Height
+    var HauteurStore = data.dimension[0].displayDimension
+    Hauteur.value = HauteurStore;
+
+    // filling of width
+    var LargeurStore = data.dimension[1].displayDimension
+    Largeur.value = LargeurStore;
+
+    document.getElementById('successAlert').style.display = 'block';
+          
+    setTimeout(function() {
+            document.getElementById('successAlert').style.display = 'none';
+    }, 2000);
    
     
   } catch (error) {
     console.error('Error fetching data:', error);
+    
+    titre_ou_designation.value = '';
+    artiste.value = '';
+    Hauteur.value = ''
+    Largeur.value = ''
+
+    document.getElementById('errorAlert').style.display = 'block';
+
+    setTimeout(function() {
+      document.getElementById('errorAlert').style.display = 'none';
+    }, 2000);
+
   }
  
   });
