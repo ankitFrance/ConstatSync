@@ -493,14 +493,38 @@ router.get('/', (req, res) => {
  /******************************************************************************************** */
 
   //console.log(req.files)
-  const ReportAfterUpdate = await Report.findById(savedReport._id);
-
-  return  res.render('feedback.ejs',   {ReportAfterUpdate})
+  res.redirect(`/feedback/${savedReport._id}`);
  
   })
 
 /************************************************************************************************************************************ */
 
+
+  router.get('/feedback/:id', async (req, res) => {
+    const reportId = req.params.id;
+    if (!mongoose.isValidObjectId(reportId)) {
+      return res.status(400).send('Invalid ID');
+
+    }
+
+     try {
+      
+        const ReportAfterUpdate = await Report.findById(reportId);
+        if (!ReportAfterUpdate) {
+          
+          console.log('no record found  ')
+        }
+     
+        res.render('feedback.ejs', { ReportAfterUpdate });
+
+    } catch (error) {
+      
+         console.error('Error  :', error);
+      
+   }
+  });
+
+/******************************************************************************************************************************************** */
 
   router.get('/DataFromLouvre/:identificationNumber', async (req, res) => {
     const identificationNumber = req.params.identificationNumber;
